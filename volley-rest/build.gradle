@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
+    useLibrary 'org.apache.http.legacy'
+
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.wenjackp.android.lib:fast-android:1.0.2'
+}
+
+repositories {
+    maven {
+        url 'http://dl.bintray.com/jackp/maven'
+    }
+}
+
+apply from: './install.gradle'
