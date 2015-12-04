@@ -26,6 +26,33 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+android.libraryVariants.all { variant ->
+    println variant.javaCompile.classpath.files
+    if (variant.name == 'release') {
+        task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+            // title = ''
+            // description = ''
+            source = variant.javaCompile.source
+            classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
+            options {
+                encoding "utf-8"
+                links "http://docs.oracle.com/javase/7/docs/api/"
+                linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+            }
+            exclude '**/BuildConfig.java'
+            exclude '**/R.java'
+        }
+        task("javadoc${variant.name.capitalize()}Jar", type: Jar, dependsOn: "generate${variant.name.capitalize()}Javadoc") {
+            classifier = 'javadoc'
+            from tasks.getByName("generate${variant.name.capitalize()}Javadoc").destinationDir
+        }
+        artifacts {
+            archives tasks.getByName("javadoc${variant.name.capitalize()}Jar")
+        }
+    }
+}
+
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -50,7 +77,7 @@ artifacts {
 // Bintray
 
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream()) // local.properties �� sdk �ľ���λ��
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 allprojects {
     repositories {
         maven {
@@ -86,32 +113,6 @@ bintray {
     }
 }
 
-
-android.libraryVariants.all { variant ->
-    println variant.javaCompile.classpath.files
-    if (variant.name == 'release') { //����ֻ�� release �� javadoc
-        task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-            // title = ''
-            // description = ''
-            source = variant.javaCompile.source
-            classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
-            options {
-                encoding "utf-8"
-                links "http://docs.oracle.com/javase/7/docs/api/"
-                linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
-            }
-            exclude '**/BuildConfig.java'
-            exclude '**/R.java'
-        }
-        task("javadoc${variant.name.capitalize()}Jar", type: Jar, dependsOn: "generate${variant.name.capitalize()}Javadoc") {
-            classifier = 'javadoc'
-            from tasks.getByName("generate${variant.name.capitalize()}Javadoc").destinationDir
-        }
-        artifacts {
-            archives tasks.getByName("javadoc${variant.name.capitalize()}Jar")
-        }
-    }
-}
 
 version = libraryVersion
 group = publishedGroupId
