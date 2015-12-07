@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package edu.single.library.volley;
+package edu.single.library.volley.error;
 
-import edu.single.library.volley.error.VolleyError;
+import edu.single.library.volley.NetworkResponse;
 
 /**
  * Indicates that the server's response could not be parsed.

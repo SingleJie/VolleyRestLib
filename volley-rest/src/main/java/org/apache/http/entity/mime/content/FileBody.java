@@ -27,15 +27,15 @@
 
 package org.apache.http.entity.mime.content;
 
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MIME;
+import org.apache.http.util.Args;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MIME;
-import org.apache.http.util.Args;
 
 /**
  * Binary body part backed by a file.

@@ -1,6 +1,5 @@
 package edu.single.library.volley.request;
 
-
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;
 
 import java.util.Iterator;

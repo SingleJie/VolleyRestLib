@@ -22,10 +22,10 @@ import android.graphics.BitmapFactory;
 
 import edu.single.library.volley.DefaultRetryPolicy;
 import edu.single.library.volley.NetworkResponse;
-import edu.single.library.volley.ParseError;
 import edu.single.library.volley.Request;
 import edu.single.library.volley.Response;
 import edu.single.library.volley.VolleyLog;
+import edu.single.library.volley.error.ParseError;
 import edu.single.library.volley.toolbox.HttpHeaderParser;
 
 /**

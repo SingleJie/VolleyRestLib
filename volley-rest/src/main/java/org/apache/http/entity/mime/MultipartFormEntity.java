@@ -27,14 +27,14 @@
 
 package org.apache.http.entity.mime;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 class MultipartFormEntity implements HttpEntity {
 

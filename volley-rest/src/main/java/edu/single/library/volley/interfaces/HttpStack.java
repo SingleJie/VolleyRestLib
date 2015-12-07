@@ -16,13 +16,13 @@
 
 package edu.single.library.volley.interfaces;
 
-import edu.single.library.volley.error.AuthFailureError;
-import edu.single.library.volley.Request;
-
 import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.util.Map;
+
+import edu.single.library.volley.Request;
+import edu.single.library.volley.error.AuthFailureError;
 
 /**
  * An HTTP stack abstraction.

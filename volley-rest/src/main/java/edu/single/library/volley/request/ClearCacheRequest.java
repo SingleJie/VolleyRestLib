@@ -16,12 +16,13 @@
 
 package edu.single.library.volley.request;
 
-import edu.single.library.volley.interfaces.Cache;
+import android.os.Handler;
+import android.os.Looper;
+
 import edu.single.library.volley.NetworkResponse;
 import edu.single.library.volley.Request;
 import edu.single.library.volley.Response;
-import android.os.Handler;
-import android.os.Looper;
+import edu.single.library.volley.interfaces.Cache;
 
 /**
  * A synthetic request used for clearing the cache.

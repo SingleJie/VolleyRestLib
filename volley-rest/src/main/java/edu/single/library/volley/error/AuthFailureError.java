@@ -19,7 +19,6 @@ package edu.single.library.volley.error;
 import android.content.Intent;
 
 import edu.single.library.volley.NetworkResponse;
-import edu.single.library.volley.error.VolleyError;
 
 /**
  * Error indicating that there was an authentication failure when performing a Request.

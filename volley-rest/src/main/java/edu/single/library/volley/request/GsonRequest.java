@@ -1,5 +1,4 @@
 package edu.single.library.volley.request;
-
 import com.google.gson.Gson;
 import com.wenjackp.android.lib.utils.EmptyUtils;
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;

@@ -17,7 +17,6 @@
 package edu.single.library.volley.error;
 
 import edu.single.library.volley.NetworkResponse;
-import edu.single.library.volley.error.VolleyError;
 
 /**
  * Indicates that there was a network error when performing a Volley request.

@@ -34,12 +34,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.single.library.volley.interfaces.Cache;
-import edu.single.library.volley.interfaces.HttpStack;
-import edu.single.library.volley.interfaces.Network;
 import edu.single.library.volley.NetworkResponse;
 import edu.single.library.volley.Request;
-import edu.single.library.volley.interfaces.RetryPolicy;
 import edu.single.library.volley.VolleyLog;
 import edu.single.library.volley.error.AuthFailureError;
 import edu.single.library.volley.error.NetworkError;
@@ -47,6 +43,10 @@ import edu.single.library.volley.error.NoConnectionError;
 import edu.single.library.volley.error.ServerError;
 import edu.single.library.volley.error.TimeoutError;
 import edu.single.library.volley.error.VolleyError;
+import edu.single.library.volley.interfaces.Cache;
+import edu.single.library.volley.interfaces.HttpStack;
+import edu.single.library.volley.interfaces.Network;
+import edu.single.library.volley.interfaces.RetryPolicy;
 
 /**
  * A network performing Volley requests over an {@link HttpStack}.
@@ -161,7 +161,7 @@ public class BasicNetwork implements Network {
             byte[] responseContents, StatusLine statusLine) {
         if (DEBUG || requestLifetime > SLOW_REQUEST_THRESHOLD_MS) {
             VolleyLog.d("HTTP response for request=<%s> [lifetime=%d], [size=%s], " +
-                    "[rc=%d], [retryCount=%s]", request, requestLifetime,
+                            "[rc=%d], [retryCount=%s]", request, requestLifetime,
                     responseContents != null ? responseContents.length : "null",
                     statusLine.getStatusCode(), request.getRetryPolicy().getCurrentRetryCount());
         }

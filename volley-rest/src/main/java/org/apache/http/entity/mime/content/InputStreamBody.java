@@ -27,13 +27,13 @@
 
 package org.apache.http.entity.mime.content;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MIME;
 import org.apache.http.util.Args;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Binary body part backed by an input stream.

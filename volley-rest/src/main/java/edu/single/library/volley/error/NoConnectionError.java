@@ -16,8 +16,6 @@
 
 package edu.single.library.volley.error;
 
-import edu.single.library.volley.error.NetworkError;
-
 /**
  * Error indicating that no connection could be established when performing a Volley request.
  */

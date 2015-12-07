@@ -273,7 +273,7 @@ public class HurlStack implements HttpStack {
             }
 
             for (Entry<String, String> mTempText : request.getParams().entrySet()) {
-                ContentType mContentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(),encodeType);
+                ContentType mContentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(), encodeType);
                 mBuilder.addTextBody(mTempText.getKey(), mTempText.getValue(), mContentType);
                 LogUtils.logEMsg("Key:" + mTempText.getKey() + "Value:" + mTempText.getValue() + " ContentType:"+mContentType);
             }
@@ -285,7 +285,7 @@ public class HurlStack implements HttpStack {
             //添加File文件
             for (Entry<String, FileModels> mTempFiles : request.getFileParams().entrySet()) {
                 FileModels item = mTempFiles.getValue();
-                ContentType mContentType = ContentType.create(item.contentType,encodeType);
+                ContentType mContentType = ContentType.create(item.contentType, encodeType);
                 mBuilder.addBinaryBody(mTempFiles.getKey(), item.data, ContentType.DEFAULT_BINARY, item.dataName );
                 LogUtils.logEMsg("Key:" + mTempFiles.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
             }
@@ -297,7 +297,7 @@ public class HurlStack implements HttpStack {
             //添加流文件
             for (Entry<String, InputStreamModels> mTempStreams : request.getStreamParams().entrySet()) {
                 InputStreamModels item = mTempStreams.getValue();
-                ContentType mContentType = ContentType.create(item.contentType,encodeType);
+                ContentType mContentType = ContentType.create(item.contentType, encodeType);
                 mBuilder.addBinaryBody(mTempStreams.getKey(), item.data, mContentType, item.dataName);
                 LogUtils.logEMsg("Key:" + mTempStreams.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
             }
@@ -309,7 +309,7 @@ public class HurlStack implements HttpStack {
             //添加byte数组文件
             for (Entry<String, ByteArrayModels> mTempBytes : request.getByteArrayParams().entrySet()) {
                 ByteArrayModels item = mTempBytes.getValue();
-                ContentType mContentType = ContentType.create(item.contentType,encodeType);
+                ContentType mContentType = ContentType.create(item.contentType, encodeType);
                 mBuilder.addBinaryBody(mTempBytes.getKey(), item.data, mContentType, item.dataName);
                 LogUtils.logEMsg("Key:" + mTempBytes.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
             }

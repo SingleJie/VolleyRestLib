@@ -27,6 +27,10 @@
 
 package org.apache.http.entity.mime;
 
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.util.Args;
+import org.apache.http.util.ByteArrayBuffer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,10 +38,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
-
-import org.apache.http.entity.mime.content.ContentBody;
-import org.apache.http.util.Args;
-import org.apache.http.util.ByteArrayBuffer;
 
 /**
  * HttpMultipart represents a collection of MIME multipart encoded content bodies. This class is
@@ -188,7 +188,7 @@ abstract class AbstractMultipartForm {
      */
     public long getTotalLength() {
         long contentLen = 0;
-        for (final FormBodyPart part: getBodyParts()) 
+        for (final FormBodyPart part: getBodyParts())
         {
             final ContentBody body = part.getBody();
             final long len = body.getContentLength();

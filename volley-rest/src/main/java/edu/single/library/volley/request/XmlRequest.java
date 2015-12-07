@@ -1,6 +1,5 @@
 package edu.single.library.volley.request;
 
-
 import com.thoughtworks.xstream.XStream;
 import com.wenjackp.android.lib.utils.EmptyUtils;
 

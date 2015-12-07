@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/SingleJie/VolleyRestLib'
     gitUrl = 'https://github.com/SingleJie/VolleyRestLib.git'
 
-    libraryVersion = '1.0.2'
+    libraryVersion = '1.0.0'
 
     developerId = 'wen'
     developerName = 'jackp'
@@ -26,12 +26,17 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+configurations {
+    javadocDeps
+}
+
 android.libraryVariants.all { variant ->
     println variant.javaCompile.classpath.files
-    if (variant.name == 'release') {
+
         task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
             // title = ''
             // description = ''
+            failOnError = false
             source = variant.javaCompile.source
             classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
             options {
@@ -49,7 +54,6 @@ android.libraryVariants.all { variant ->
         artifacts {
             archives tasks.getByName("javadoc${variant.name.capitalize()}Jar")
         }
-    }
 }
 
 
@@ -62,6 +66,7 @@ task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
 //     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 //    classpath += project.files(configurations.compile.files,android.getBootClasspath().join(File.pathSeparator))
+//    classpath += configurations.javadocDeps
     options.encoding = "UTF-8"
 }
 
