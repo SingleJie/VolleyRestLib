@@ -1,4 +1,5 @@
 package edu.single.library.volley.request;
+
 import com.google.gson.Gson;
 import com.wenjackp.android.lib.utils.EmptyUtils;
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;
@@ -9,6 +10,8 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import edu.single.library.volley.CallBackListener;
+import edu.single.library.volley.IParseClassListener;
+import edu.single.library.volley.IParseTypeListener;
 import edu.single.library.volley.NetworkResponse;
 import edu.single.library.volley.RequestParams;
 import edu.single.library.volley.Response;
@@ -21,32 +24,36 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
 /**
  * Gson请求
  *
- * @param <T>
  * @author Single
  * @version 1.4
  * @category 请求网络并用Gson返回指定对象
  */
-public class GsonRequest<T> extends SimpleBaseRequest<T> {
+@Deprecated
+public class GsonRequest extends SimpleBaseRequest<Object> {
 
     private final static Gson gson = new Gson();
-    private final Class<T> clazz;
-    private final Type typeOfT;
-    private CallBackListener<T> callBackListener;
-    private final RequestParams urlParams;
-    private final boolean cacheEnable;
+    private Class<Object> clazz;
+    private Type typeOfT;
+    private CallBackListener<Object> callBackListener;
+    private RequestParams urlParams;
+    private boolean cacheEnable;
+    private IParseClassListener mParseClassListener;
+    private IParseTypeListener mParseTypeListener;
 
     /**
      * Gson请求
+     *
      * @param url
      * @param urlParams
      * @param callBackListener
      */
-    public GsonRequest(final String url, final RequestParams urlParams, final CallBackListener<T> callBackListener) {
+    public GsonRequest(final String url, final RequestParams urlParams, final CallBackListener<Object> callBackListener) {
         super(url, urlParams, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
                 if (callBackListener != null) {
+
                     if ((error.getCause() instanceof HttpHostConnectException) && urlParams != null && urlParams.getCacheEnable()) {
                         //连接超时的情况,读取本地存储的资源
                         String json = url + ((urlParams != null && urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
@@ -60,10 +67,10 @@ public class GsonRequest<T> extends SimpleBaseRequest<T> {
                                 Type typeOfT = (urlParams != null && urlParams.getGsonCallBackByType() != null) ? urlParams.getGsonCallBackByType() : null;
 
                                 if (typeOfT != null) {
-                                    callBackListener.onResponse(((Response<T>) Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(error.networkResponse))).result);
+                                    callBackListener.onResponse(((Response<Object>) Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(error.networkResponse))).result);
                                 }
 
-                                Class<T> clazz = (urlParams != null && urlParams.getGsonCallBackByClass() != null) ? (Class<T>) urlParams.getGsonCallBackByClass() : null;
+                                Class<Object> clazz = (urlParams != null && urlParams.getGsonCallBackByClass() != null) ? (Class<Object>) urlParams.getGsonCallBackByClass() : null;
 
                                 if (clazz != null) {
                                     callBackListener.onResponse(Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(error.networkResponse)).result);
@@ -79,12 +86,14 @@ public class GsonRequest<T> extends SimpleBaseRequest<T> {
             }
         }, callBackListener);
 
-        this.urlParams = urlParams;
-        this.callBackListener = callBackListener;
-        this.clazz = (urlParams != null && urlParams.getGsonCallBackByClass() != null) ? (Class<T>) urlParams.getGsonCallBackByClass() : null;
-        this.typeOfT = (urlParams != null && urlParams.getGsonCallBackByType() != null) ? urlParams.getGsonCallBackByType() : null;
-        this.cacheEnable = urlParams != null ? urlParams.getCacheEnable() : false;
-        SharedPreferencesTools.setPriorityByDefault(true);
+        if (urlParams != null) {
+            this.urlParams = urlParams;
+            this.callBackListener = callBackListener;
+            this.mParseTypeListener = urlParams.getParseTypeListener();
+            this.mParseClassListener = urlParams.getParseClassListener();
+            this.cacheEnable = urlParams.getCacheEnable();
+            SharedPreferencesTools.setPriorityByDefault(true);
+        }
     }
 
     @Override
@@ -98,12 +107,12 @@ public class GsonRequest<T> extends SimpleBaseRequest<T> {
     }
 
     @Override
-    public CallBackListener<T> getListener() {
+    public CallBackListener<Object> getListener() {
         return callBackListener;
     }
 
     @Override
-    protected void deliverResponse(T response) {
+    protected void deliverResponse(Object response) {
         if (null != callBackListener) {
             callBackListener.onResponse(response);
         }
@@ -111,14 +120,15 @@ public class GsonRequest<T> extends SimpleBaseRequest<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Response<T> parseNetworkResponse(NetworkResponse response) {
+    protected Response<Object> parseNetworkResponse(NetworkResponse response) {
+
         String json = null;
 
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             VolleyLog.logEMsg("Response Data : " + json);
 
-            if(urlParams.getPreHandlerListener()!=null){
+            if (urlParams.getPreHandlerListener() != null) {
                 json = urlParams.getPreHandlerListener().onPreHandler(json);
                 VolleyLog.logEMsg(" PreHandler Data : " + json);
             }
@@ -132,11 +142,17 @@ public class GsonRequest<T> extends SimpleBaseRequest<T> {
                 saveCacheData(this.getUrl(), json);
             }
 
-            if (typeOfT != null) {
-                return (Response<T>) Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(response));
+            if (mParseClassListener != null) {
+                clazz = mParseClassListener.getParseClass(json);
+                return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
             }
 
-            return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
+            if (mParseTypeListener != null) {
+                typeOfT = mParseTypeListener.getParseType(json);
+                return Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(response));
+            }
+
+            return null;
 
         } catch (Exception e) {
             return Response.error(new VolleyError(e));

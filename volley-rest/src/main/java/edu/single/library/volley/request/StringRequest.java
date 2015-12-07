@@ -2,8 +2,6 @@ package edu.single.library.volley.request;
 
 import com.wenjackp.android.lib.utils.EmptyUtils;
 
-import org.apache.http.conn.HttpHostConnectException;
-
 import java.io.UnsupportedEncodingException;
 
 import edu.single.library.volley.CallBackListener;
@@ -23,7 +21,14 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
  */
 public class StringRequest extends SimpleBaseRequest<String> {
 
+    /**
+     * 回调事件
+     */
     private final CallBackListener<String> callBackListener;
+
+    /**
+     * 是否开启缓存
+     */
     private final boolean cacheEnable;
 
     public StringRequest(final String url, final RequestParams urlParams, final CallBackListener<String> callBackListener) {
@@ -33,7 +38,7 @@ public class StringRequest extends SimpleBaseRequest<String> {
             public void onErrorResponse(VolleyError error) {
 
                 if (callBackListener != null) {
-                    if ((error.getCause() instanceof HttpHostConnectException) && urlParams != null && urlParams.getCacheEnable()) {
+                    if (urlParams != null && urlParams.getCacheEnable()) {
                         //连接超时的情况,读取本地存储的资源
                         String json = url + ((urlParams != null && urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
                         json = getCacheData(json);
@@ -49,6 +54,7 @@ public class StringRequest extends SimpleBaseRequest<String> {
                     }
                 }
             }
+
         }, callBackListener);
         this.callBackListener = callBackListener;
         this.cacheEnable = urlParams.getCacheEnable();

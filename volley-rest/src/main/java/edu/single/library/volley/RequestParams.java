@@ -98,6 +98,9 @@ public class RequestParams {
 
     private XStream mXStream;
 
+    private IParseClassListener mParseClassListener;
+    private IParseTypeListener mParseTypeListener;
+
     public RequestParams() {
         init();
     }
@@ -291,11 +294,11 @@ public class RequestParams {
         return encodeType;
     }
 
-    public void setOnPreHandlerListener(OnPreHandlerListener mPreHandlerListener){
+    public void setOnPreHandlerListener(OnPreHandlerListener mPreHandlerListener) {
         this.mPreHandlerListener = mPreHandlerListener;
     }
 
-    public OnPreHandlerListener getPreHandlerListener(){
+    public OnPreHandlerListener getPreHandlerListener() {
         return this.mPreHandlerListener;
     }
 
@@ -507,5 +510,21 @@ public class RequestParams {
 
     public void addImmutableType(Class type) {
         mXStream.addImmutableType(type);
+    }
+
+    public void setParseClassListener(IParseClassListener mClassListener){
+        this.mParseClassListener = mClassListener;
+    }
+
+    public IParseClassListener getParseClassListener(){
+        return this.mParseClassListener;
+    }
+
+    public void setParseTypeListener(IParseTypeListener mTypeListener){
+        this.mParseTypeListener = mTypeListener;
+    }
+
+    public IParseTypeListener getParseTypeListener(){
+        return this.mParseTypeListener;
     }
 }
