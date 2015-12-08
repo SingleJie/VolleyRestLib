@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="fast-android-1.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.wenjackp.android.lib/fast-android/1.0.1/jars/libs/nineoldandroids-2.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.wenjackp.android.lib/fast-android/1.0.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.wenjackp.android.lib/fast-android/1.0.1/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.wenjackp.android.lib/fast-android/1.0.1/jars/libs/gson-2.2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wenjackp.android.lib/fast-android/1.0.1/bf71f6bacffa0adc049e66a23435f3e68b6508b3/fast-android-1.0.1-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/wenjackp/android/lib/fast-android/1.0.1/fast-android-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

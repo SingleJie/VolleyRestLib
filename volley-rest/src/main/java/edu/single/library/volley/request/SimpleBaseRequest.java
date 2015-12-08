@@ -113,6 +113,7 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
 
     /**
      * 获取请求信息
+     *
      * @return
      */
     public String buildRequestLink() {

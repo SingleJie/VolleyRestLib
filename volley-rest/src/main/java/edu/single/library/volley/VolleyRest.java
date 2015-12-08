@@ -3,6 +3,7 @@ package edu.single.library.volley;
 import android.content.Context;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.wenjackp.android.lib.utils.SharedPreferencesTools;
 
 import edu.single.library.volley.enums.RequestType;
 import edu.single.library.volley.enums.ResponseType;
@@ -27,7 +28,9 @@ public class VolleyRest {
      * @param context
      */
     public static void initConfig(Context context) {
-        mRequestQueue = Volley.newRequestQueue(context,new OkHttpClientStack(new OkHttpClient()));
+        mRequestQueue = Volley.newRequestQueue(context, new OkHttpClientStack(new OkHttpClient()));
+        SharedPreferencesTools.initConfig(context);
+        SharedPreferencesTools.setPriorityByDefault(true);
     }
 
     public static void setDefaultRequestType(RequestType mDefaultRequestType) {
