@@ -5,8 +5,6 @@ import android.content.Context;
 import com.squareup.okhttp.OkHttpClient;
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;
 
-import edu.single.library.volley.enums.RequestType;
-import edu.single.library.volley.enums.ResponseType;
 import edu.single.library.volley.toolbox.OkHttpClientStack;
 import edu.single.library.volley.toolbox.Volley;
 
@@ -16,8 +14,6 @@ import edu.single.library.volley.toolbox.Volley;
 public class VolleyRest {
 
     private static RequestQueue mRequestQueue;
-    public static RequestType mDefaultRequestType = RequestType.STRING;
-    public static ResponseType mDefaultResponseType = ResponseType.STRING;
 
     private VolleyRest() {
     }
@@ -31,14 +27,6 @@ public class VolleyRest {
         mRequestQueue = Volley.newRequestQueue(context, new OkHttpClientStack(new OkHttpClient()));
         SharedPreferencesTools.initConfig(context);
         SharedPreferencesTools.setPriorityByDefault(true);
-    }
-
-    public static void setDefaultRequestType(RequestType mDefaultRequestType) {
-        VolleyRest.mDefaultRequestType = mDefaultRequestType;
-    }
-
-    public static void setmDefaultResponseType(ResponseType mDefaultResponseType) {
-        VolleyRest.mDefaultResponseType = mDefaultResponseType;
     }
 
     /**

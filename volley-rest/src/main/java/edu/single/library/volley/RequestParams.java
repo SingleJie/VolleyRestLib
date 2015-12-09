@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import edu.single.library.volley.enums.RequestType;
-import edu.single.library.volley.enums.ResponseType;
 import edu.single.library.volley.interfaces.OnPreHandlerListener;
 import edu.single.library.volley.interfaces.RetryPolicy;
 import edu.single.library.volley.models.ByteArrayModels;
@@ -92,9 +90,6 @@ public class RequestParams {
     private JSONObject jsonObjValue;
 
     private JSONArray jsonArrayValue;
-
-    private ResponseType mResponseType = edu.single.library.volley.VolleyRest.mDefaultResponseType;
-    private RequestType mRequestType = edu.single.library.volley.VolleyRest.mDefaultRequestType;
 
     private XStream mXStream;
 
@@ -450,22 +445,6 @@ public class RequestParams {
 
     public String getContentType() {
         return contentType;
-    }
-
-    public void setRequestType(RequestType mRequestType) {
-        this.mRequestType = mRequestType;
-    }
-
-    public RequestType getRequestType() {
-        return mRequestType;
-    }
-
-    public void setResponseType(ResponseType mResponseType) {
-        this.mResponseType = mResponseType;
-    }
-
-    public ResponseType getResponseType() {
-        return mResponseType;
     }
 
     public XStream getXStream() {
