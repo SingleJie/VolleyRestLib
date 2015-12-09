@@ -51,7 +51,7 @@ public class StringRequest extends SimpleBaseRequest<String> {
 
                     if (!networkIsConnected && urlParams != null && urlParams.getCacheEnable() ) {
                         //得到Key
-                        String json = url + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
+                        String json = (url.lastIndexOf("?")==-1?url+"?":url)  + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
                         VolleyLog.logEMsg("Cache Key : " + json);
                         json = getCacheData(json);
                         VolleyLog.logEMsg("Cache Value : " + json);
@@ -98,7 +98,6 @@ public class StringRequest extends SimpleBaseRequest<String> {
 
         if (cacheEnable && !EmptyUtils.emptyOfString(json)) {
             //本地缓存
-            VolleyLog.logEMsg("save data : " + this.getUrl() + "  " + json);
             saveCacheData(this.getUrl(), json);
         }
 
