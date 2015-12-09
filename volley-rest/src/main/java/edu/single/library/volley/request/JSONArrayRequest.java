@@ -54,7 +54,7 @@ public class JSONArrayRequest extends JSONRequest<JSONArray> {
                 if (callBackListener != null) {
                     if ((error.getCause() instanceof HttpHostConnectException) && urlParams != null && urlParams.getCacheEnable()) {
                         //连接超时的情况,读取本地存储的资源
-                        String json = url + ((urlParams != null && urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
+                        String json = (url.lastIndexOf("?")==-1?url+"?":url)  + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
                         json = getCacheData(json);
 
                         if (EmptyUtils.emptyOfString(json)) {
