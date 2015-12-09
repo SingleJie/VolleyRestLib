@@ -23,15 +23,15 @@ public class VolleyRestExample extends AppCompatActivity {
 
         AllDao
                 .getInstance()
-                .getSVJSchemeCategory(new CallBackListener<String>() {
+                .getSVJSchemeCategory(new CallBackListener<Object>(){
                     @Override
-                    public void onResponse(String response) {
-                        LogUtils.logEMsg("有数据-->" + response);
+                    public void onResponse(Object response) {
+                        LogUtils.toastLongMsg("Success");
                     }
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        super.onErrorResponse(error);
+                        LogUtils.toastLongMsg("Error");
                     }
                 });
     }
