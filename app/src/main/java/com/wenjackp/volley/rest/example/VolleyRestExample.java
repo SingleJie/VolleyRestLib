@@ -19,19 +19,23 @@ public class VolleyRestExample extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         VolleyRest.initConfig(this);
-        LogUtils.initConfig(this,true);
+        LogUtils.initConfig(this, true);
 
         AllDao
                 .getInstance()
-                .getSVJSchemeCategory(new CallBackListener<Object>(){
+                .userLogin("159020388430","123456",new CallBackListener<Object>(){
                     @Override
                     public void onResponse(Object response) {
-                        LogUtils.toastLongMsg("Success");
+                        if(response instanceof DefaultModel){
+                            DefaultModel model = (DefaultModel) response;
+                            LogUtils.toastShortMsg(model.Status);
+                        }
                     }
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        LogUtils.toastLongMsg("Error");
+                        LogUtils.toastShortMsg("网络异常");
+                        LogUtils.logEMsg("Error -->" + error.toString());
                     }
                 });
     }

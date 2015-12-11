@@ -1,12 +1,14 @@
 package com.wenjackp.volley.rest.example;
 
 /**
- * Created by Administrator on 2015/10/7.
+ * Created by Deng
+ * on 2015/7/3 15:14
+ * JSON返回数据实体类
  */
-public class DefaultModel<T> {
+public class JsonResultModel {
 
     public int Status;
     public String ErrorMessage;
     public String InfoMessage;
-    public T JSON;
+
 }

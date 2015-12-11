@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.wenjackp.android.lib.utils.EmptyUtils;
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;
 
-import org.apache.http.conn.HttpHostConnectException;
-
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -25,14 +23,12 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
  * Gson请求
  *
  * @author Single
- * @version 1.4
+ * @version 1.5
  * @category 请求网络并用Gson返回指定对象
  */
 public class GsonRequest extends SimpleBaseRequest<Object> {
 
     private final static Gson gson = new Gson();
-    private Class<Object> clazz;
-    private Type typeOfT;
     private CallBackListener<Object> callBackListener;
     private RequestParams urlParams;
     private boolean cacheEnable;
@@ -41,7 +37,6 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
 
     /**
      * Gson请求
-     *
      * @param url
      * @param urlParams
      * @param callBackListener
@@ -53,33 +48,33 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
 
                 if (callBackListener != null) {
 
-                    if ((error.getCause() instanceof HttpHostConnectException) && urlParams != null && urlParams.getCacheEnable()) {
-                        //连接超时的情况,读取本地存储的资源
-                        String json = (url.lastIndexOf("?")==-1?url+"?":url)  + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
-                        json = getCacheData(json);
-
-                        if (EmptyUtils.emptyOfString(json)) {
-                            //如果读取的本地数据还是为空则返回异常
-                            callBackListener.onErrorResponse(error);
-                        } else {
-                            try {
-                                Type typeOfT = (urlParams != null && urlParams.getGsonCallBackByType() != null) ? urlParams.getGsonCallBackByType() : null;
-
-                                if (typeOfT != null) {
-                                    callBackListener.onResponse(((Response<Object>) Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(error.networkResponse))).result);
-                                }
-
-                                Class<Object> clazz = (urlParams != null && urlParams.getGsonCallBackByClass() != null) ? (Class<Object>) urlParams.getGsonCallBackByClass() : null;
-
-                                if (clazz != null) {
-                                    callBackListener.onResponse(Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(error.networkResponse)).result);
-                                }
-                            } catch (Exception ex) {
-                                callBackListener.onErrorResponse(new VolleyError(ex));
-                            }
-                        }
-                    } else {
+                    if(urlParams == null){
                         callBackListener.onErrorResponse(error);
+                    }else{
+                        VolleyLog.logEMsg("Error : " + error);
+                        boolean networkIsConnected = (error.getCause().toString().indexOf("java.net.UnknownHostException")==-1);
+                        VolleyLog.logEMsg("网络状态 : "+ networkIsConnected);
+
+                        if (!networkIsConnected && urlParams != null && urlParams.getCacheEnable() ) {
+                            //得到Key
+                            String json = (url.lastIndexOf("?") == -1 ? url + "?" : url) + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
+                            VolleyLog.logEMsg("Cache Key : " + json);
+                            json = getCacheData(json);
+                            VolleyLog.logEMsg("Cache Value : " + json);
+
+                            IParseClassListener mIParseClassListener = urlParams.getParseClassListener();
+                            if(mIParseClassListener!=null){
+                                callBackListener.onResponse(gson.fromJson(json,mIParseClassListener.getParseClass(json)));
+                            }
+
+                            IParseTypeListener mIParseTypeListener = urlParams.getParseTypeListener();
+                            if(mIParseTypeListener!=null){
+                                callBackListener.onResponse(gson.fromJson(json,mIParseTypeListener.getParseType(json)));
+                            }
+
+                        }else{
+                            callBackListener.onErrorResponse(error);
+                        }
                     }
                 }
             }
@@ -138,16 +133,31 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
             }
 
             if (cacheEnable && !EmptyUtils.emptyOfString(json)) {
-                saveCacheData(this.getUrl(), json);
+                String url = null;
+
+                switch (getMethod()){
+                    case Method.POST:
+
+                        url = this.getUrl() + "?" + new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType()));
+                        break;
+
+                    case Method.GET:
+
+                        url = this.getUrl();
+                        break;
+                }
+
+                VolleyLog.logEMsg("保存Key:"+url);
+                saveCacheData(url, json);
             }
 
             if (mParseClassListener != null) {
-                clazz = mParseClassListener.getParseClass(json);
+                Class clazz = mParseClassListener.getParseClass(json);
                 return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
             }
 
             if (mParseTypeListener != null) {
-                typeOfT = mParseTypeListener.getParseType(json);
+                Type typeOfT = mParseTypeListener.getParseType(json);
                 return Response.success(gson.fromJson(json, typeOfT), HttpHeaderParser.parseCacheHeaders(response));
             }
 

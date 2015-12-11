@@ -233,6 +233,7 @@ public class RequestParams {
         return this.requestMethod;
     }
 
+    @Deprecated
     public void setGsonCallbackType(Class<?> cls) {
         this.cls = cls;
     }
@@ -241,6 +242,7 @@ public class RequestParams {
         return cls;
     }
 
+    @Deprecated
     public void setGsonCallBackType(Type typeOfT) {
         this.typeOfT = typeOfT;
     }

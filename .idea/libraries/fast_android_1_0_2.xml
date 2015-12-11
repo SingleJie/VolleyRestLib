@@ -7,6 +7,8 @@
       <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.wenjackp.android.lib/fast-android/1.0.2/jars/libs/gson-2.2.4.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wenjackp.android.lib/fast-android/1.0.2/4dd408e1d271b22596df3b5ac2300c5547cfc172/fast-android-1.0.2-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
