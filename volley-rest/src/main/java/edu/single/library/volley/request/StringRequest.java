@@ -37,6 +37,8 @@ public class StringRequest extends SimpleBaseRequest<String> {
      */
     private boolean cacheEnable;
 
+    private RequestParams urlParams;
+
     public StringRequest(final String url, final RequestParams urlParams, final CallBackListener<String> callBackListener) {
         super(url, urlParams, new Response.ErrorListener() {
 
@@ -73,6 +75,7 @@ public class StringRequest extends SimpleBaseRequest<String> {
         if (urlParams != null) {
             this.mPreHandlerListener = urlParams.getPreHandlerListener();
             this.callBackListener = callBackListener;
+            this.urlParams = urlParams;
             this.cacheEnable = urlParams.getCacheEnable();
         }
     }
@@ -97,6 +100,21 @@ public class StringRequest extends SimpleBaseRequest<String> {
         }
 
         if (cacheEnable && !EmptyUtils.emptyOfString(json)) {
+
+            String url = null;
+
+            switch (getMethod()){
+                case Method.POST:
+
+                 //   url = this.getUrl() + "?" + new String(encodeParameters(getParams(), getEncodeType());
+                    break;
+
+                case Method.GET:
+
+                    url = this.getUrl();
+                    break;
+            }
+
             //本地缓存
             saveCacheData(this.getUrl(), json);
         }
