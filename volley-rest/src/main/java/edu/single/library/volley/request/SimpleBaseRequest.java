@@ -23,7 +23,7 @@ import edu.single.library.volley.models.InputStreamModels;
 /**
  * 请求父类
  *
- * @param <T>
+ * @param <T> 泛型
  * @author Single
  * @version 1.3
  */
@@ -93,30 +93,14 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
         return mListener;
     }
 
-    /**
-     * 读取本地JSON字符串
-     *
-     * @return
-     */
     protected static String getCacheData(String key) {
         return SharedPreferencesTools.getString(key);
     }
 
-    /**
-     * 保存JSON字符串到本地
-     *
-     * @param key
-     * @param value
-     */
     protected static void saveCacheData(String key, String value) {
         SharedPreferencesTools.putString(key, value);
     }
 
-    /**
-     * 获取请求信息
-     *
-     * @return
-     */
     public String buildRequestLink() {
         StringBuilder mBuilder = new StringBuilder();
         mBuilder.append("*******************************************************\n");
@@ -154,12 +138,6 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
         return mBuilder.toString();
     }
 
-    /**
-     * 打印请求的内容
-     *
-     * @param mBuilder
-     * @throws Exception
-     */
     private void debugRequestInfo(StringBuilder mBuilder) throws Exception {
 
         mBuilder.append("\n");
@@ -179,12 +157,6 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
         mBuilder.append(getBodyContentType());
     }
 
-    /**
-     * 获取请求类型的文字名称
-     *
-     * @param type
-     * @return
-     */
     private String getRequestNameByType(int type) {
 
         String strName = null;
@@ -247,9 +219,6 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
     @Override
     protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
 
-    /**
-     * 网络请求失败缓存监听
-     */
     public static class ErrorCacheListener implements Response.ErrorListener {
 
         private RequestParams urlParams;

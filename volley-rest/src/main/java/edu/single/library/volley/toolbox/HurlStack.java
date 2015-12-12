@@ -16,8 +16,6 @@
 
 package edu.single.library.volley.toolbox;
 
-import com.wenjackp.android.lib.utils.LogUtils;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -25,10 +23,6 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.OnUploadListener;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
@@ -46,14 +40,10 @@ import java.util.Map.Entry;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
-import edu.single.library.volley.CallBackListener;
 import edu.single.library.volley.Request;
 import edu.single.library.volley.Request.Method;
 import edu.single.library.volley.error.AuthFailureError;
 import edu.single.library.volley.interfaces.HttpStack;
-import edu.single.library.volley.models.ByteArrayModels;
-import edu.single.library.volley.models.FileModels;
-import edu.single.library.volley.models.InputStreamModels;
 
 /**
  * An {@link HttpStack} based on {@link HttpURLConnection}.
@@ -100,7 +90,7 @@ public class HurlStack implements HttpStack {
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
             throws IOException, AuthFailureError {
         String url = request.getUrl();
-        LogUtils.logEMsg("Url----------------- -- -- > " + url);
+//        LogUtils.logEMsg("Url----------------- -- -- > " + url);
         HashMap<String, String> map = new HashMap<String, String>();
         map.putAll(request.getHeaders());
         map.putAll(additionalHeaders);
@@ -251,78 +241,78 @@ public class HurlStack implements HttpStack {
 
         if (request.hasFileParams()) {
 
-            //含有文件参数
-            MultipartEntityBuilder mBuilder = MultipartEntityBuilder.create();
-            mBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            String encodeType = request.getParamsEncoding();
-
-
-            mBuilder.setUploadListener(new OnUploadListener() {
-                @Override
-                public void onUploadCallBack(long current, long totalLength) {
-                    CallBackListener<?> mListener = request.getListener();
-
-                    if (mListener != null) {
-                        mListener.onUploadResponse(current, totalLength);
-                    }
-                }
-            });
-
-            if (!request.getParams().isEmpty()) {
-                LogUtils.logEMsg("添加文本参数");
-            }
-
-            for (Entry<String, String> mTempText : request.getParams().entrySet()) {
-                ContentType mContentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(), encodeType);
-                mBuilder.addTextBody(mTempText.getKey(), mTempText.getValue(), mContentType);
-                LogUtils.logEMsg("Key:" + mTempText.getKey() + "Value:" + mTempText.getValue() + " ContentType:"+mContentType);
-            }
-
-            if (!request.getFileParams().entrySet().isEmpty()) {
-                LogUtils.logEMsg("添加File文件");
-            }
-
-            //添加File文件
-            for (Entry<String, FileModels> mTempFiles : request.getFileParams().entrySet()) {
-                FileModels item = mTempFiles.getValue();
-                ContentType mContentType = ContentType.create(item.contentType, encodeType);
-                mBuilder.addBinaryBody(mTempFiles.getKey(), item.data, ContentType.DEFAULT_BINARY, item.dataName );
-                LogUtils.logEMsg("Key:" + mTempFiles.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
-            }
-
-            if (!request.getStreamParams().isEmpty()) {
-                LogUtils.logEMsg("添加流文件");
-            }
-
-            //添加流文件
-            for (Entry<String, InputStreamModels> mTempStreams : request.getStreamParams().entrySet()) {
-                InputStreamModels item = mTempStreams.getValue();
-                ContentType mContentType = ContentType.create(item.contentType, encodeType);
-                mBuilder.addBinaryBody(mTempStreams.getKey(), item.data, mContentType, item.dataName);
-                LogUtils.logEMsg("Key:" + mTempStreams.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
-            }
-
-            if(!request.getByteArrayParams().isEmpty()){
-                LogUtils.logEMsg("添加ByteArray文件");
-            }
-
-            //添加byte数组文件
-            for (Entry<String, ByteArrayModels> mTempBytes : request.getByteArrayParams().entrySet()) {
-                ByteArrayModels item = mTempBytes.getValue();
-                ContentType mContentType = ContentType.create(item.contentType, encodeType);
-                mBuilder.addBinaryBody(mTempBytes.getKey(), item.data, mContentType, item.dataName);
-                LogUtils.logEMsg("Key:" + mTempBytes.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
-            }
-
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setRequestProperty("Charset", encodeType);
-            connection.setRequestProperty(HEADER_CONTENT_TYPE, mBuilder.generateContentType());
-
-            HttpEntity entity = mBuilder.build();
-            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-            entity.writeTo(out);
-            out.close();
+//            //含有文件参数
+//            MultipartEntityBuilder mBuilder = MultipartEntityBuilder.create();
+//            mBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//            String encodeType = request.getParamsEncoding();
+//
+//
+//            mBuilder.setUploadListener(new OnUploadListener() {
+//                @Override
+//                public void onUploadCallBack(long current, long totalLength) {
+//                    CallBackListener<?> mListener = request.getListener();
+//
+//                    if (mListener != null) {
+//                        mListener.onUploadResponse(current, totalLength);
+//                    }
+//                }
+//            });
+//
+//            if (!request.getParams().isEmpty()) {
+//                LogUtils.logEMsg("添加文本参数");
+//            }
+//
+//            for (Entry<String, String> mTempText : request.getParams().entrySet()) {
+//                ContentType mContentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(), encodeType);
+//                mBuilder.addTextBody(mTempText.getKey(), mTempText.getValue(), mContentType);
+//                LogUtils.logEMsg("Key:" + mTempText.getKey() + "Value:" + mTempText.getValue() + " ContentType:"+mContentType);
+//            }
+//
+//            if (!request.getFileParams().entrySet().isEmpty()) {
+//                LogUtils.logEMsg("添加File文件");
+//            }
+//
+//            //添加File文件
+//            for (Entry<String, FileModels> mTempFiles : request.getFileParams().entrySet()) {
+//                FileModels item = mTempFiles.getValue();
+//                ContentType mContentType = ContentType.create(item.contentType, encodeType);
+//                mBuilder.addBinaryBody(mTempFiles.getKey(), item.data, ContentType.DEFAULT_BINARY, item.dataName );
+//                LogUtils.logEMsg("Key:" + mTempFiles.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
+//            }
+//
+//            if (!request.getStreamParams().isEmpty()) {
+//                LogUtils.logEMsg("添加流文件");
+//            }
+//
+//            //添加流文件
+//            for (Entry<String, InputStreamModels> mTempStreams : request.getStreamParams().entrySet()) {
+//                InputStreamModels item = mTempStreams.getValue();
+//                ContentType mContentType = ContentType.create(item.contentType, encodeType);
+//                mBuilder.addBinaryBody(mTempStreams.getKey(), item.data, mContentType, item.dataName);
+//                LogUtils.logEMsg("Key:" + mTempStreams.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
+//            }
+//
+//            if(!request.getByteArrayParams().isEmpty()){
+//                LogUtils.logEMsg("添加ByteArray文件");
+//            }
+//
+//            //添加byte数组文件
+//            for (Entry<String, ByteArrayModels> mTempBytes : request.getByteArrayParams().entrySet()) {
+//                ByteArrayModels item = mTempBytes.getValue();
+//                ContentType mContentType = ContentType.create(item.contentType, encodeType);
+//                mBuilder.addBinaryBody(mTempBytes.getKey(), item.data, mContentType, item.dataName);
+//                LogUtils.logEMsg("Key:" + mTempBytes.getKey() + " ContentType:" + mContentType.getMimeType() + " FileName:" + item.dataName);
+//            }
+//
+//            connection.setDoOutput(true);
+//            connection.setDoInput(true);
+//            connection.setRequestProperty("Charset", encodeType);
+//            connection.setRequestProperty(HEADER_CONTENT_TYPE, mBuilder.generateContentType());
+//
+//            HttpEntity entity = mBuilder.build();
+//            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+//            entity.writeTo(out);
+//            out.close();
 
         } else {
             //普通文字上传
