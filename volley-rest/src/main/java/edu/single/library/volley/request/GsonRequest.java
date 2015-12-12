@@ -13,7 +13,6 @@ import edu.single.library.volley.IParseTypeListener;
 import edu.single.library.volley.NetworkResponse;
 import edu.single.library.volley.RequestParams;
 import edu.single.library.volley.Response;
-import edu.single.library.volley.Response.ErrorListener;
 import edu.single.library.volley.VolleyLog;
 import edu.single.library.volley.error.AuthFailureError;
 import edu.single.library.volley.error.VolleyError;
@@ -37,48 +36,26 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
 
     /**
      * Gson请求
-     * @param url
-     * @param urlParams
-     * @param callBackListener
+     * @param url 网络请求地址
+     * @param urlParams 请求参数
+     * @param callBackListener 回调事件
      */
     public GsonRequest(final String url, final RequestParams urlParams, final CallBackListener<Object> callBackListener) {
-        super(url, urlParams, new ErrorListener() {
+        super(url, urlParams, new ErrorCacheListener(urlParams, url, callBackListener, new OnResultListener<Object>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-
-                if (callBackListener != null) {
-
-                    if(urlParams == null){
-                        callBackListener.onErrorResponse(error);
-                    }else{
-                        VolleyLog.logEMsg("Error : " + error);
-                        boolean networkIsConnected = (error.getCause().toString().indexOf("java.net.UnknownHostException")==-1);
-                        VolleyLog.logEMsg("网络状态 : "+ networkIsConnected);
-
-                        if (!networkIsConnected && urlParams != null && urlParams.getCacheEnable() ) {
-                            //得到Key
-                            String json = (url.lastIndexOf("?") == -1 ? url + "?" : url) + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
-                            VolleyLog.logEMsg("Cache Key : " + json);
-                            json = getCacheData(json);
-                            VolleyLog.logEMsg("Cache Value : " + json);
-
-                            IParseClassListener mIParseClassListener = urlParams.getParseClassListener();
-                            if(mIParseClassListener!=null){
-                                callBackListener.onResponse(gson.fromJson(json,mIParseClassListener.getParseClass(json)));
-                            }
-
-                            IParseTypeListener mIParseTypeListener = urlParams.getParseTypeListener();
-                            if(mIParseTypeListener!=null){
-                                callBackListener.onResponse(gson.fromJson(json,mIParseTypeListener.getParseType(json)));
-                            }
-
-                        }else{
-                            callBackListener.onErrorResponse(error);
-                        }
-                    }
+            public Object onResult(String json) {
+                IParseClassListener mIParseClassListener = urlParams.getParseClassListener();
+                if (mIParseClassListener != null) {
+                    return gson.fromJson(json, mIParseClassListener.getParseClass(json));
                 }
+
+                IParseTypeListener mIParseTypeListener = urlParams.getParseTypeListener();
+                if (mIParseTypeListener != null) {
+                    return gson.fromJson(json, mIParseTypeListener.getParseType(json));
+                }
+                return null;
             }
-        }, callBackListener);
+        }), callBackListener);
 
         if (urlParams != null) {
             this.urlParams = urlParams;
@@ -135,7 +112,7 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
             if (cacheEnable && !EmptyUtils.emptyOfString(json)) {
                 String url = null;
 
-                switch (getMethod()){
+                switch (getMethod()) {
                     case Method.POST:
 
                         url = this.getUrl() + "?" + new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType()));
@@ -147,7 +124,7 @@ public class GsonRequest extends SimpleBaseRequest<Object> {
                         break;
                 }
 
-                VolleyLog.logEMsg("保存Key:"+url);
+                VolleyLog.logEMsg("保存Key:" + url);
                 saveCacheData(url, json);
             }
 

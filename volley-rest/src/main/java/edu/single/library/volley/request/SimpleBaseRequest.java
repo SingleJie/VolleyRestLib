@@ -1,5 +1,6 @@
 package edu.single.library.volley.request;
 
+import com.wenjackp.android.lib.utils.EmptyUtils;
 import com.wenjackp.android.lib.utils.SharedPreferencesTools;
 
 import java.util.Iterator;
@@ -11,7 +12,9 @@ import edu.single.library.volley.Request;
 import edu.single.library.volley.RequestParams;
 import edu.single.library.volley.Response;
 import edu.single.library.volley.Response.ErrorListener;
+import edu.single.library.volley.VolleyLog;
 import edu.single.library.volley.error.AuthFailureError;
+import edu.single.library.volley.error.VolleyError;
 import edu.single.library.volley.interfaces.RetryPolicy;
 import edu.single.library.volley.models.ByteArrayModels;
 import edu.single.library.volley.models.FileModels;
@@ -245,4 +248,54 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
 
     @Override
     protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
+
+    /**
+     * 网络请求失败缓存监听
+     */
+    public static class ErrorCacheListener implements Response.ErrorListener {
+
+        private RequestParams urlParams;
+        private String url;
+        private CallBackListener callBackListener;
+        private OnResultListener mResultListener;
+
+        public ErrorCacheListener(RequestParams urlParams, String url, CallBackListener callBackListener, OnResultListener mResultListener) {
+            this.urlParams = urlParams;
+            this.url = url;
+            this.callBackListener = callBackListener;
+            this.mResultListener = mResultListener;
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+
+            VolleyLog.logEMsg("Error : " + error);
+            boolean networkIsConnected = (error.getCause().toString().indexOf("java.net.UnknownHostException") == -1);
+            VolleyLog.logEMsg("网络状态 : " + networkIsConnected);
+
+            if (callBackListener != null) {
+
+                if (!networkIsConnected && urlParams != null && urlParams.getCacheEnable()) {
+                    //得到Key
+                    String json = (url.lastIndexOf("?") == -1 ? url + "?" : url) + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
+                    VolleyLog.logEMsg("Cache Key : " + json);
+                    json = getCacheData(json);
+                    VolleyLog.logEMsg("Cache Value : " + json);
+
+                    if (EmptyUtils.emptyOfString(json)) {
+                        //如果读取的本地数据还是为空则返回异常
+                        callBackListener.onErrorResponse(error);
+                    } else {
+                        callBackListener.onResponse(mResultListener.onResult(json));
+                    }
+                } else {
+                    callBackListener.onErrorResponse(error);
+                }
+            }
+        }
+    }
+
+    public interface OnResultListener<T> {
+        T onResult(String json);
+    }
 }

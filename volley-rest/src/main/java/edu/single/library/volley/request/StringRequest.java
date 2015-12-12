@@ -9,7 +9,6 @@ import edu.single.library.volley.NetworkResponse;
 import edu.single.library.volley.RequestParams;
 import edu.single.library.volley.Response;
 import edu.single.library.volley.VolleyLog;
-import edu.single.library.volley.error.VolleyError;
 import edu.single.library.volley.interfaces.OnPreHandlerListener;
 import edu.single.library.volley.toolbox.HttpHeaderParser;
 
@@ -17,7 +16,7 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
  * 请求返回String
  *
  * @author WenJackp
- * @version 1.3
+ * @version 1.4
  * @category 请求网络并用返回String对象
  */
 public class StringRequest extends SimpleBaseRequest<String> {
@@ -37,40 +36,25 @@ public class StringRequest extends SimpleBaseRequest<String> {
      */
     private boolean cacheEnable;
 
+    /**
+     * 请求参数
+     */
     private RequestParams urlParams;
 
+    /**
+     * StringRequest
+     *
+     * @param url              网络请求地址
+     * @param urlParams        请求参数
+     * @param callBackListener 回调事件
+     */
     public StringRequest(final String url, final RequestParams urlParams, final CallBackListener<String> callBackListener) {
-        super(url, urlParams, new Response.ErrorListener() {
-
+        super(url, urlParams, new ErrorCacheListener(urlParams, url, callBackListener, new OnResultListener<String>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-
-                VolleyLog.logEMsg("Error : " + error);
-                boolean networkIsConnected = (error.getCause().toString().indexOf("java.net.UnknownHostException")==-1);
-                VolleyLog.logEMsg("网络状态 : "+ networkIsConnected);
-
-                if (callBackListener != null) {
-
-                    if (!networkIsConnected && urlParams != null && urlParams.getCacheEnable() ) {
-                        //得到Key
-                        String json = (url.lastIndexOf("?")==-1?url+"?":url)  + ((urlParams.getParams() != null) ? new String(encodeParameters(urlParams.getParams(), urlParams.getEncodeType())) : "");
-                        VolleyLog.logEMsg("Cache Key : " + json);
-                        json = getCacheData(json);
-                        VolleyLog.logEMsg("Cache Value : " + json);
-
-                        if (EmptyUtils.emptyOfString(json)) {
-                            //如果读取的本地数据还是为空则返回异常
-                            callBackListener.onErrorResponse(error);
-                        } else {
-                            callBackListener.onResponse(json);
-                        }
-                    } else {
-                        callBackListener.onErrorResponse(error);
-                    }
-                }
+            public String onResult(String json) {
+                return json;
             }
-
-        }, callBackListener);
+        }), callBackListener);
 
         if (urlParams != null) {
             this.mPreHandlerListener = urlParams.getPreHandlerListener();
@@ -103,10 +87,10 @@ public class StringRequest extends SimpleBaseRequest<String> {
 
             String url = null;
 
-            switch (getMethod()){
+            switch (getMethod()) {
                 case Method.POST:
 
-                 //   url = this.getUrl() + "?" + new String(encodeParameters(getParams(), getEncodeType());
+                    url = this.getUrl() + "?" + new String(encodeParameters(this.urlParams.getParams(), urlParams.getEncodeType()));
                     break;
 
                 case Method.GET:
@@ -116,7 +100,7 @@ public class StringRequest extends SimpleBaseRequest<String> {
             }
 
             //本地缓存
-            saveCacheData(this.getUrl(), json);
+            saveCacheData(url, json);
         }
 
         return Response.success(json, HttpHeaderParser.parseCacheHeaders(response));

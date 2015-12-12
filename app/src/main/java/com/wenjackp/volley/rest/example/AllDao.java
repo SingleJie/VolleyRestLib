@@ -7,6 +7,7 @@ import edu.single.library.volley.IParseTypeListener;
 import edu.single.library.volley.RequestParams;
 import edu.single.library.volley.VolleyRest;
 import edu.single.library.volley.request.GsonRequest;
+import edu.single.library.volley.request.StringRequest;
 
 /**
  * Created by Administrator on 2015/10/12.
@@ -27,7 +28,7 @@ public class AllDao extends BaseDao {
      *
      * @param mListener
      */
-    public void getSVJSchemeCategory(CallBackListener<Object> mListener) {
+    public void getSVJSchemeCategoryWithGson(CallBackListener<Object> mListener) {
         RequestParams mParams = newParams();
         String jsonParams = buildParamsString();
         mParams.put("Params", jsonParams);
@@ -40,6 +41,22 @@ public class AllDao extends BaseDao {
             }
         });
         GsonRequest mRequest = new GsonRequest(HttpAddressUtils.HTTP_INTERFACE_TEXT, mParams, mListener);
+        VolleyRest.getRequestQueue().add(mRequest);
+    }
+
+
+    /**
+     * 获取三维家方案分类
+     *
+     * @param mListener
+     */
+    public void getSVJSchemeCategoryWithString(CallBackListener<String> mListener) {
+        RequestParams mParams = newParams();
+        String jsonParams = buildParamsString();
+        mParams.put("Params", jsonParams);
+        mParams.put("Command", UrlUtils.ACTION_SCHEME_CATEGORY);
+        mParams.setCacheOnDisk(true);
+        StringRequest mRequest = new StringRequest(HttpAddressUtils.HTTP_INTERFACE_TEXT, mParams, mListener);
         VolleyRest.getRequestQueue().add(mRequest);
     }
 }
