@@ -203,7 +203,7 @@ public interface IRequestParams {
 	
 	/**
 	 * 设置请求方式 默认为GET
-	 * @param requestMode @See { @link Request.Method }
+	 * @param requestMode
 	 */
 	void setRequestMethod(int requestMode);
 	

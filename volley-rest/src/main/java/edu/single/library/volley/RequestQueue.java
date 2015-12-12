@@ -35,7 +35,6 @@ import edu.single.library.volley.request.SimpleBaseRequest;
 
 /**
  * A request dispatch queue with a thread pool of dispatchers.
- * <p/>
  * Calling {@link #add(Request)} will enqueue the given Request for dispatch,
  * resolving from either cache or network on a worker thread, and then delivering
  * a parsed response on the main thread.

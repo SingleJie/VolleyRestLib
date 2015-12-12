@@ -21,9 +21,8 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
 /**
  * Gson请求
  *
- * @author Single
- * @version 1.5
- * @category 请求网络并用Gson返回指定对象
+ * @author WenJackp
+ * @version 1.6
  */
 public class GsonRequest extends SimpleBaseRequest<Object> {
 

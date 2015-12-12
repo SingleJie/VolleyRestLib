@@ -57,7 +57,7 @@ import edu.single.library.volley.models.FileModels;
 import edu.single.library.volley.models.InputStreamModels;
 
 /**
- * An HttpStack that performs request over an {@link HttpClient}.
+ * An HttpStack that performs request over
  */
 public class HttpClientStack implements HttpStack {
     protected final HttpClient mClient;
@@ -218,7 +218,6 @@ public class HttpClientStack implements HttpStack {
 
     /**
      * Called before the request is executed using the underlying HttpClient.
-     * <p/>
      * <p>Overwrite in subclasses to augment the request.</p>
      */
     protected void onPrepareRequest(HttpUriRequest request) throws IOException {

@@ -32,7 +32,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 
     /**
      * Creates a new response delivery interface.
-     * @param handler {@link Handler} to post responses on
+     * @param handler
      */
     public ExecutorDelivery(final Handler handler) {
         // Make an Executor that just wraps the handler.

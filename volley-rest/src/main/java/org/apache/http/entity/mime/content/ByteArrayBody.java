@@ -59,8 +59,6 @@ public class ByteArrayBody extends AbstractContentBody {
      * @param mimeType The MIME type of the file contained in this part.
      * @param filename The name of the file contained in this part.
      *
-     * @deprecated (4.3) use {@link ByteArrayBody#ByteArrayBody(byte[], ContentType, String)}
-     *   or {@link org.apache.http.entity.mime.MultipartEntityBuilder}
      */
     @Deprecated
     public ByteArrayBody(final byte[] data, final String mimeType, final String filename) {

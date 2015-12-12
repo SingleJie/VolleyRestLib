@@ -45,8 +45,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Builder for multipart {@link HttpEntity}s.
- *
+ * Builder for multipart
  * @since 4.3
  */
 public class MultipartEntityBuilder implements OnUploadListener {

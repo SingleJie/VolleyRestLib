@@ -17,7 +17,6 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
  *
  * @author WenJackp
  * @version 1.4
- * @category 请求网络并用返回String对象
  */
 public class StringRequest extends SimpleBaseRequest<String> {
 

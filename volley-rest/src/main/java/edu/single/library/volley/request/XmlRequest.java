@@ -19,7 +19,6 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
  * @param <T>
  * @author Single
  * @version 1.2
- * @category XmlRequest
  */
 public class XmlRequest<T> extends SimpleBaseRequest<T> {
 

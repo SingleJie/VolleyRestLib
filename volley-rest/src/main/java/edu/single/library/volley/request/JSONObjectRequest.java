@@ -36,9 +36,8 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
 /**
  * JsonObjectRequest
  *
- * @author Single
+ * @author WenJackp
  * @version 1.3
- * @category
  */
 public class JSONObjectRequest extends JSONRequest<JSONObject> {
 

@@ -36,9 +36,8 @@ import edu.single.library.volley.toolbox.HttpHeaderParser;
 /**
  * JsonArrayRequest
  *
- * @author Single
+ * @author WenJackp
  * @version 1.3
- * @category
  */
 public class JSONArrayRequest extends JSONRequest<JSONArray> {
 

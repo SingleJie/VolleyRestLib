@@ -25,8 +25,7 @@ import edu.single.library.volley.models.InputStreamModels;
  *
  * @param <T>
  * @author Single
- * @version 1.2
- * @category
+ * @version 1.3
  */
 public abstract class SimpleBaseRequest<T> extends Request<T> {
 
@@ -98,7 +97,6 @@ public abstract class SimpleBaseRequest<T> extends Request<T> {
      * 读取本地JSON字符串
      *
      * @return
-     * @throws AuthFailureError
      */
     protected static String getCacheData(String key) {
         return SharedPreferencesTools.getString(key);
