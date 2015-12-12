@@ -26,6 +26,11 @@ import edu.single.library.volley.interfaces.Cache;
  */
 public class Response<T> {
 
+    public boolean intermediate = false;
+    public final VolleyError error;
+    public final Cache.Entry cacheEntry;
+    public T result;
+
     /**
      * Callback interface for delivering parsed responses.
      */
@@ -47,27 +52,16 @@ public class Response<T> {
         public void onErrorResponse(VolleyError error);
     }
 
-    /**
-     * Returns a successful response containing the parsed result.
-     */
+    public boolean isSuccess() {
+        return error == null;
+    }
+
     public static <T> Response<T> success(T result, Cache.Entry cacheEntry) {
         return new Response<T>(result, cacheEntry);
     }
 
     public static <T> Response<T> error(VolleyError error) {
         return new Response<T>(error);
-    }
-
-    public final T result;
-
-    public final Cache.Entry cacheEntry;
-
-    public final VolleyError error;
-
-    public boolean intermediate = false;
-
-    public boolean isSuccess() {
-        return error == null;
     }
 
 
