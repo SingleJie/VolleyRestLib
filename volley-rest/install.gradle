@@ -2,6 +2,9 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'volley-rest'
@@ -14,8 +17,7 @@ ext {
 
     siteUrl = 'https://github.com/SingleJie/VolleyRestLib'
     gitUrl = 'https://github.com/SingleJie/VolleyRestLib.git'
-
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.6'
 
     developerId = 'wen'
     developerName = 'jackp'
@@ -33,14 +35,15 @@ configurations {
 android.libraryVariants.all { variant ->
     println variant.javaCompile.classpath.files
 
+    //generate${variant.name.capitalize()}Javadoc", type: Javadoc
         task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
             // title = ''
             // description = ''
             failOnError = false
             source = variant.javaCompile.source
             ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-            classpath =  //files(variant.javaCompile.classpath.files) + files(ext.androidJar);
-                    files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
+            classpath =  files(variant.javaCompile.classpath.files, project.android.getBootClasspath()) + files(ext.androidJar);
+                    //files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
             options {
                 encoding "utf-8"
                 links "http://docs.oracle.com/javase/8/docs/api/"
@@ -60,12 +63,13 @@ android.libraryVariants.all { variant ->
 
 
 task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
+   from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 //     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 //    classpath += project.files(configurations.compile.files,android.getBootClasspath().join(File.pathSeparator))
 //    classpath += configurations.javadocDeps

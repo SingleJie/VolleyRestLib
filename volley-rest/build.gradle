@@ -25,8 +25,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.wenjackp.android.lib:fast-android:1.0.2'
-    compile files('libs/httpcore-4.3.3.jar')
     compile files('libs/xstream-1.4.7.jar')
+    compile files('libs/httpcore-4.3.3.jar')
 }
 
 repositories {
